@@ -6,6 +6,7 @@
 
 </head>
 <body>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places"></script>
     <div class="fixed-center blocked container" style="width:294px; line-height:22px;">
         <p style="font-size:16px;"><b>Water Report Submission</b></p>
         <label><b>Date and time:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="demo"></p></label>
@@ -13,7 +14,7 @@
         <br>
         <label><b>Reporter:</b> tester</label><br>
         <label><b>Location:</b></label>
-        <input style="width:100px;" type="text" placeholder="Enter Location" name="location" required>
+        <input class="Autocomplete" style="width:100px;" type="text" placeholder="Enter Location" name="location" required>
         <button>SEARCH</button>
         <br>
 
@@ -45,5 +46,8 @@
     <script>
         document.getElementById("demo").innerHTML = Date();
     </script>
+
+
+
 </body>
 </html>
