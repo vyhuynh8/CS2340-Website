@@ -21,9 +21,6 @@
 
 <script>
     function sendHTTP() {
-        var usern = document.getElementsByName('email')[0].value;
-        var passw = document.getElementByName('password')[0].value;
-        var base64 = "Basic" + " " + btoa(document.getElementsByName('email')[0].value) + ":" + btoa(document.getElementByName('password')[0].value);
 
         var data = JSON.stringify(false);
 
@@ -37,7 +34,7 @@
         });
 
         xhr.open("POST", "http://umb.kaangoksal.com:5235/login");
-        xhr.setRequestHeader("authorization", base64);
+        xhr.setRequestHeader("authorization", "Basic a2Fhbmdva3NhbEBnbWFpbC5jb206Y3VrdWJpaw==");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.setRequestHeader("postman-token", "2fd56f43-8af6-87f9-443d-691f40567566");
@@ -46,18 +43,28 @@
     }
 
     function sendloginReq() {
+        var base64encoded = "Basic" + " " + btoa(document.getElementsByName('email')[0].value + ":" + document.getElementsByName('password')[0].value);
+
+
         var data = JSON.stringify(false);
         var xhttp = new XMLHttpRequest();
 
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
                 console.log(" Response : " + xhttp.responseText);
+                if (xhttp.responseText == "<html><body><h1>Login Failed, Wrong Password</h1></body></html>") {
+                    alert("LOGIN FAILED.");
+                }
+                else {
+                    window.location.replace("landing.html");
+                    localStorage.setItem("email", document.getElementsByName('email')[0].value);
+                    localStorage.setItem("password", document.getElementsByName('password')[0].value);
+                }
             }
         };
-
         xhttp.open("POST", "http://umb.kaangoksal.com:5235/login", true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.setRequestHeader("authorization", "Basic a2Fhbmdva3NhbEBnbWFpbC5jb206Y3VrdWJpaw==");
+        xhttp.setRequestHeader("authorization", base64encoded);
         xhttp.send(data);
         console.log("Sent Request");
     }

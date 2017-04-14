@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form action="/landing.html">
+
+    <div class="fixed-center blocked container">
+        <label><b>Username:</b></label>
+        <input type="text" placeholder="Enter Username" name="username" required>
+
+        <label><b>Password:</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+
+        <label><b>Email:</b></label>
+        <input placeholder="Enter Email" name="email" required>
+
+    </div>
+
+</form>
+
+<button class="button" onclick="return registerAccount();" style="width:130px" type="submit">Login</button>
+
+<script>
+    function registerAccount() {
+
+        var data = JSON.stringify({
+            "email": String(document.getElementsByName('email')[0].value),
+            "password": String(document.getElementsByName('password')[0].value),
+            "username": String(document.getElementsByName('username')[0].value),
+            "token": "",
+            "address": ""
+        });
+
+        alert(data);
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.responseText);
+            }
+        });
+        xhr.open("POST", "http://umb.kaangoksal.com:5235/register");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.send(data);
+    }
+</script>
+
+</body>
+</html>
