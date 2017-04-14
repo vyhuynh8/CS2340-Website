@@ -14,13 +14,12 @@
         <input type="password" placeholder="Enter Password" name="password" required="">
 
         <button class="button" type="button" onclick="sendloginReq()">Login</button>
-	<button class="button" type="button" onclick="parsingformData()">Test</button>
 
     </div>
 
 </form>
 
-
+<button class="button" type="button" onclick="registerAccount()">Register</button>
 
 <script>
 function parsingformData(Data) {
@@ -50,6 +49,34 @@ function sendloginReq() {
 	xhttp.setRequestHeader("authorization", base64encoded);
 	xhttp.send(data);
 	console.log("Sent Request");
+}
+
+function registerAccount() {
+		
+
+	var data = JSON.stringify({
+	  "email": "newuser@penis.com",
+	  "password": "verisafepassword",
+	  "username": "kaan",
+	  "token": "",
+	  "address": ""
+	});
+
+	var xhr = new XMLHttpRequest();
+	
+
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+	    console.log(this.responseText);
+	  }
+	});
+
+	xhr.open("POST", "http://umb.kaangoksal.com:5235/register");
+	xhr.setRequestHeader("content-type", "application/json");
+
+	xhr.send(data);
+
+
 }
 
 </script>
