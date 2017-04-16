@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="stylesheet.css">
+
+</head>
+<body>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places"></script>
+    <div class="fixed-center blocked container" style="width:294px; line-height:22px;">
+        <p style="font-size:16px;"><b>Water Purity Submission</b></p>
+        <label><b>Date and time:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="demo"></p></label>
+        <label><b>Report Number:</b> 2340</label>
+        <br>
+        <label><b>Reporter:</b> tester</label><br>
+        <label><b>Location:</b></label>
+        <input class="Autocomplete" style="width:100px;" type="text" placeholder="Enter Location" name="location" required>
+        <button>SEARCH</button>
+        <br>
+
+        <label><b>Overall Condition</b></label>
+        <select name="type" style="width:86px">
+            <option value="Safe">Safe</option>
+            <option value="Treatable">Treatable</option>
+            <option value="Unsafe">Unsafe</option>
+        </select>
+        <br>
+        <br>
+        <label><b>Virus PPM:</b></label>
+        <input type="text" name="Virus" required>
+        <br>
+        <br>
+        <label><b>Contaiminant PPM:</b></label>
+        <input type="text" name="Contaiminant" required>
+        <br>
+        <br>
+        <button onclick="location.href = 'landing.html';" style="width:96px; margin-right:2px;"  type="submit">SUBMIT</button>
+        <button onclick="location.href = 'landing.html';" style="width:96px"  type="submit">CANCEL</button>
+    </div>
+
+
+    <script>
+        document.getElementById("demo").innerHTML = Date();
+    </script>
+
+
+
+</body>
+</html>

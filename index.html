@@ -47,7 +47,6 @@
     function sendloginReq() {
         var base64encoded = "Basic" + " " + btoa(document.getElementsByName('email')[0].value + ":" + document.getElementsByName('password')[0].value);
 
-
         var data = JSON.stringify(false);
         var xhttp = new XMLHttpRequest();
 
