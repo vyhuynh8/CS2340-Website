@@ -59,10 +59,17 @@
                     alert("LOGIN FAILED.");
                 }
                 else {
-                    window.location.replace("landing.html");
                     localStorage.setItem("email", document.getElementsByName('email')[0].value);
                     localStorage.setItem("password", document.getElementsByName('password')[0].value);
                     localStorage.setItem("username", jsonfile['username']);
+                    localStorage.setItem("account_type", jsonfile['account_type']);
+                    if (localStorage.getItem("account_type") == "manager") {
+                        window.location.replace("manager_landing.html");
+                    } else if (localStorage.getItem("account_type") == "worker") {
+                        window.location.replace("worker_landing.html");
+                    } else {
+                        window.location.replace("landing.html");
+                    }
                 }
             }
         };
