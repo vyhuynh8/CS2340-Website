@@ -6,23 +6,106 @@
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-<form action="/action_page.php">
-
+<form action="/landing.html">
     <div class="fixed-center blocked container" style="width:190px; line-height: 180%;">
-        <label><b>Current Username:</b> test </label>
-        <input style="width:170px" type="text" placeholder="Enter Username" name="uname" required>
+        <label><b>Current Username: </b></label><label id="ulabel"></label>
+        <input style="width:170px" type="text" id="username"/>
 
-        <label><b>Current Password:</b> test </label>
-        <input style="width:170px" type="password" placeholder="Enter Password" name="psw" required>
+        <label><b>Current Password: </b></label><label id="plabel"><b>Current Password:</b></label>
+        <input style="width:170px" type="password" id="password"/>
 
-        <label><b>Current Email:</b> test </label>
-        <input style="width:170px" type="email" placeholder="Enter Email" name="email" required>
+        <label><b>Current Email: </b></label><label id="elabel"><b>Current Email:</b></label>
+        <input style="width:170px" id="email"/>
+
         <div style="display:inline-block;">
-        <button onclick="location.href = 'landing.html';" style="width:86px" type="submit">DONE</button>
-        <button onclick="location.href = 'landing.html';" style="width:86px" type="submit">CANCEL</button>
+
+            <!--<button onclick="location.href = 'landing.html';" style="width:86px" type="submit">CANCEL</button>-->
         </div>
     </div>
 
 </form>
+<button onclick="return editProfile();" style="width:86px" type="submit">DONE</button>
+<button onclick="return test();" style="width:86px" type="submit">Test</button>
+<script>
+    function onclick(){
+        var input = document.getElementById("username");
+        input.value = localStorage.getItem("username");
+        input = document.getElementById("email");
+        input.value = localStorage.getItem("email");
+        input = document.getElementById("password");
+        input.value = localStorage.getItem("password");
+
+        input = document.getElementById("ulabel");
+        input.textContent = localStorage.getItem("username");
+        input = document.getElementById("elabel");
+        input.textContent= localStorage.getItem("email");
+        input = document.getElementById("plabel");
+        input.textContent = localStorage.getItem("password");
+    }
+
+    onclick();
+
+    function editProfile() {
+        alert("test");
+        var base64encoded = "Basic" + " " + btoa(document.getElementById('email').value + ":" + document.getElementById('password').value);
+
+
+        var data = JSON.stringify({
+            "email": String(document.getElementById('email').value),
+            "password": String(document.getElementById('password').value),
+            "username": String(document.getElementById('username').value),
+            "token": "",
+            "address": ""
+        });
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                console.log(" Response : " + xhttp.responseText);
+                var jsonfile = JSON.parse(xhttp.responseText);
+                if (xhttp.responseText == "<html><body><h1>Login Failed, Wrong Password</h1></body></html>") {
+                    alert("LOGIN FAILED.");
+                }
+                else {
+                    window.location.replace("landing.html");
+                    localStorage.setItem("email", document.getElementsByName('email')[0].value);
+                    localStorage.setItem("password", document.getElementsByName('password')[0].value);
+                    localStorage.setItem("username", jsonfile['username']);
+                }
+            }
+        };
+
+        xhttp.open("POST", "http://umb.kaangoksal.com:5235/edit_user", true);
+        xhttp.setRequestHeader("content-type", "application/json");
+        xhttp.setRequestHeader("authorization", base64encoded);
+        xhttp.send(data);
+        console.log("Sent Request");
+    }
+
+    function test() {
+
+        var data = JSON.stringify({
+            "email": "kaan",
+            "password": "",
+            "username": "",
+            "token": "",
+            "address": ""
+        });
+
+        alert(data);
+        var xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.responseText);
+            }
+        });
+        xhr.open("POST", "http://umb.kaangoksal.com:5235/register");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.send(data);
+    }
+</script>
 </body>
+
 </html>

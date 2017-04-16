@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="stylesheet.css">
 </head>
-<body cz-shortcut-listen="true">
+<body>
 <form action="/landing.html">
 
     <div class="fixed-center blocked container">
@@ -20,27 +20,29 @@
 <button class="button" onclick="return sendloginReq();" style="width:130px" type="submit">Login</button>
 
 <script>
-    function sendHTTP() {
+//    function sendHTTP() {
+//
+//        var data = JSON.stringify(false);
+//
+//        var xhr = new XMLHttpRequest();
+//        xhr.withCredentials = true;
+//
+//        xhr.addEventListener("readystatechange", function () {
+//            if (this.readyState === 4) {
+//                console.log(this.responseText);
+//            }
+//        });
+//
+//        xhr.open("POST", "http://umb.kaangoksal.com:5235/login");
+//        xhr.setRequestHeader("authorization", "Basic a2Fhbmdva3NhbEBnbWFpbC5jb206Y3VrdWJpaw==");
+//        xhr.setRequestHeader("content-type", "application/json");
+//        xhr.setRequestHeader("cache-control", "no-cache");
+//        xhr.setRequestHeader("postman-token", "2fd56f43-8af6-87f9-443d-691f40567566");
+//
+//        xhr.send(data);
+//    }
 
-        var data = JSON.stringify(false);
 
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                console.log(this.responseText);
-            }
-        });
-
-        xhr.open("POST", "http://umb.kaangoksal.com:5235/login");
-        xhr.setRequestHeader("authorization", "Basic a2Fhbmdva3NhbEBnbWFpbC5jb206Y3VrdWJpaw==");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.setRequestHeader("postman-token", "2fd56f43-8af6-87f9-443d-691f40567566");
-
-        xhr.send(data);
-    }
 
     function sendloginReq() {
         var base64encoded = "Basic" + " " + btoa(document.getElementsByName('email')[0].value + ":" + document.getElementsByName('password')[0].value);
@@ -52,6 +54,7 @@
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
                 console.log(" Response : " + xhttp.responseText);
+                var jsonfile = JSON.parse(xhttp.responseText);
                 if (xhttp.responseText == "<html><body><h1>Login Failed, Wrong Password</h1></body></html>") {
                     alert("LOGIN FAILED.");
                 }
@@ -59,6 +62,7 @@
                     window.location.replace("landing.html");
                     localStorage.setItem("email", document.getElementsByName('email')[0].value);
                     localStorage.setItem("password", document.getElementsByName('password')[0].value);
+                    localStorage.setItem("username", jsonfile['username']);
                 }
             }
         };

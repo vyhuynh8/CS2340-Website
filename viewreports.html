@@ -56,3 +56,68 @@
 </table>
 </body>
 </html>
+<script>
+    function getReports(){
+        var base64encoded = "Basic" + " " + btoa(localStorage.getItem('email') + ":" + localStorage.getItem('password'));
+
+
+        var data = JSON.stringify(false);
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                console.log(" Response : " + xhttp.responseText);
+                var jsonfile = JSON.parse(xhttp.responseText);
+                console.log(jsonfile);
+//                if (xhttp.responseText == "<html><body><h1>Login Failed, Wrong Password</h1></body></html>") {
+//                    alert("LOGIN FAILED.");
+//                }
+//                else {
+//
+//                }
+            }
+        };
+        xhttp.open("POST", "http://umb.kaangoksal.com:5235/get_water_reports");
+        xhttp.setRequestHeader("content-type", "application/json");
+        xhttp.setRequestHeader("authorization", base64encoded);
+        xhttp.send(data);
+        console.log("Sent Request");
+    }
+
+    getReports();
+</script>
+
+<!--<script>-->
+    <!--String base64_encoded = parseBase64BasicAuth(user);-->
+
+    <!--String bodyString = "";-->
+
+    <!--OkHttpClient client = new OkHttpClient();-->
+
+    <!--MediaType mediaType = MediaType.parse("application/octet-stream");-->
+    <!--RequestBody body = RequestBody.create(mediaType, bodyString);-->
+    <!--Request request = new Request.Builder()-->
+        <!--.url("http://umb.kaangoksal.com:5235/get_water_reports")-->
+        <!--.post(body)-->
+        <!--.addHeader("Authorization", base64_encoded)-->
+        <!--.build();-->
+
+    <!--Response response = client.newCall(request).execute();-->
+    <!--String responseString = response.body().string();-->
+    <!--//Yo WTF you can only check the response object once! FUCK JAVA #LAME-->
+    <!--//Log.d("[HTTP]", "Server Response " + response.toString() + "\n" + response.body().string());-->
+    <!--Log.d("ServerConnector", "Server returned response for get reports = " +responseString );-->
+    <!--JSONObject received;-->
+    <!--JSONArray return_array = null;-->
+    <!--try {-->
+        <!--received = new JSONObject(responseString);-->
+        <!--Log.d("ServerConnector", "JsonObj " + received.toString());-->
+        <!--return_array = received.getJSONArray("reports");-->
+    <!--} catch (JSONException E){-->
+        <!--Log.d("ServerConnector", "get Reports Json problem! " +responseString + E.getMessage() + " " +E.getLocalizedMessage() + " " + E.toString() );-->
+    <!--}-->
+
+
+    <!--return return_array;-->
+
+<!--</script>-->
