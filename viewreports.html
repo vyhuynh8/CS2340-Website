@@ -4,59 +4,21 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="stylesheet.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 </head>
 <body>
 <button onclick="location.href = 'landing.html';" style="width:90px">BACK</button>
-<table style="width:70%; top:15%" class="fixed-center blocked container">
-    <tr>
-        <th>Date</th>
-        <th>Report Number</th>
-        <th>Reporter</th>
-        <th>Latitude</th>
-        <th>Longitude</th>
-        <th>Type Of Water</th>
-        <th>Condition</th>
-    </tr>
-    <tr>
-        <td>2017-03-28 22:18:49</td>
-        <td>5aa68222-3f9a-4c26-951e</td>
-        <td>kaangoksal@gmail.com</td>
-        <td>36.9993</td>
-        <td>35.3423</td>
-        <td>Bottled</td>
-        <td>Waste</td>
-    </tr>
-    <tr>
-        <td>2017-03-28 22:18:49</td>
-        <td>5aa68222-3f9a-4c26-951e</td>
-        <td>kaangoksal@gmail.com</td>
-        <td>36.9993</td>
-        <td>35.3423</td>
-        <td>Bottled</td>
-        <td>Waste</td>
-    </tr>
-    <tr>
-        <td>2017-03-28 22:18:49</td>
-        <td>5aa68222-3f9a-4c26-951e</td>
-        <td>kaangoksal@gmail.com</td>
-        <td>36.9993</td>
-        <td>35.3423</td>
-        <td>Bottled</td>
-        <td>Waste</td>
-    </tr>
-    <tr>
-        <td>2017-03-28 22:18:49</td>
-        <td>5aa68222-3f9a-4c26-951e</td>
-        <td>kaangoksal@gmail.com</td>
-        <td>36.9993</td>
-        <td>35.3423</td>
-        <td>Bottled</td>
-        <td>Waste</td>
-    </tr>
-</table>
+    <div id="test">
+    <table>
+        <th>Water Reports</th>
+    </table>
+    </div>
+
 </body>
 </html>
 <script>
+
     function getReports(){
         var base64encoded = "Basic" + " " + btoa(localStorage.getItem('email') + ":" + localStorage.getItem('password'));
 
@@ -69,6 +31,27 @@
                 console.log(" Response : " + xhttp.responseText);
                 var jsonfile = JSON.parse(xhttp.responseText);
                 console.log(jsonfile);
+                var result = [];
+                for(var i in jsonfile.reports)
+                    result.push(jsonfile.reports[i]);
+
+                console.log(result);
+                console.log(jsonfile.reports);
+
+                var string = $('html').attr('class');
+                var arrayLength = parseInt(jsonfile.reports.length);
+
+                for (i=0; i<arrayLength; i++) {
+                    $("#test table") .append('<tr><td>'+"Data: "+jsonfile.reports[i].data+'<br>'+"Date: "+jsonfile.reports[i].date+'<br>'+"Location: "+jsonfile.reports[i].location+'<br>'+"Report Number: "+jsonfile.reports[i].report_number+'<br>'+"Reporter: "+jsonfile.reports[i].reporter+'<br>'+'</td></tr>')
+                }
+
+
+//                data.addColumn('string', 'Topping');
+//                data.addColumn('number', 'Slices');
+//                data.addRows(result);
+//                google.charts.load("current", {packages: ["corechart", "timeline"]});
+
+
 //                if (xhttp.responseText == "<html><body><h1>Login Failed, Wrong Password</h1></body></html>") {
 //                    alert("LOGIN FAILED.");
 //                }
