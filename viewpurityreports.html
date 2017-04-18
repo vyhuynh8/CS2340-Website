@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+<body>
+<button onclick="location.href = 'landing.html';" style="width:90px">BACK</button>
+<div id="test">
+    <table>
+        <th>Purity Water Reports</th>
+    </table>
+</div>
+
+</body>
+</html>
+<script>
+
+    function getReports(){
+        var base64encoded = "Basic" + " " + btoa(localStorage.getItem('email') + ":" + localStorage.getItem('password'));
+
+
+        var data = JSON.stringify(false);
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                console.log(" Response : " + xhttp.responseText);
+                var jsonfile = JSON.parse(xhttp.responseText);
+                console.log(jsonfile);
+                var result = [];
+                for(var i in jsonfile.reports)
+                    result.push(jsonfile.reports[i]);
+
+                console.log(result);
+                console.log(jsonfile.reports);
+
+                var string = $('html').attr('class');
+                var arrayLength = parseInt(jsonfile.reports.length);
+
+                for (i=0; i<arrayLength; i++) {
+                    $("#test table") .append('<tr><td>'+"Data: "+jsonfile.reports[i].data+'<br>'+"Date: "+jsonfile.reports[i].date+'<br>'+"Location: "+jsonfile.reports[i].location+'<br>'+"Report Number: "+jsonfile.reports[i].report_number+'<br>'+"Reporter: "+jsonfile.reports[i].reporter+'<br>'+'</td></tr>')
+                }
+
+
+//                data.addColumn('string', 'Topping');
+//                data.addColumn('number', 'Slices');
+//                data.addRows(result);
+//                google.charts.load("current", {packages: ["corechart", "timeline"]});
+
+
+//                if (xhttp.responseText == "<html><body><h1>Login Failed, Wrong Password</h1></body></html>") {
+//                    alert("LOGIN FAILED.");
+//                }
+//                else {
+//
+//                }
+            }
+        };
+        xhttp.open("POST", "http://umb.kaangoksal.com:5235/get_water_purity_reports");
+        xhttp.setRequestHeader("content-type", "application/json");
+        xhttp.setRequestHeader("authorization", base64encoded);
+        xhttp.send(data);
+        console.log("Sent Request");
+    }
+
+    getReports();
+</script>
+
+<!--<script>-->
+<!--String base64_encoded = parseBase64BasicAuth(user);-->
+
+<!--String bodyString = "";-->
+
+<!--OkHttpClient client = new OkHttpClient();-->
+
+<!--MediaType mediaType = MediaType.parse("application/octet-stream");-->
+<!--RequestBody body = RequestBody.create(mediaType, bodyString);-->
+<!--Request request = new Request.Builder()-->
+<!--.url("http://umb.kaangoksal.com:5235/get_water_reports")-->
+<!--.post(body)-->
+<!--.addHeader("Authorization", base64_encoded)-->
+<!--.build();-->
+
+<!--Response response = client.newCall(request).execute();-->
+<!--String responseString = response.body().string();-->
+<!--//Yo WTF you can only check the response object once! FUCK JAVA #LAME-->
+<!--//Log.d("[HTTP]", "Server Response " + response.toString() + "\n" + response.body().string());-->
+<!--Log.d("ServerConnector", "Server returned response for get reports = " +responseString );-->
+<!--JSONObject received;-->
+<!--JSONArray return_array = null;-->
+<!--try {-->
+<!--received = new JSONObject(responseString);-->
+<!--Log.d("ServerConnector", "JsonObj " + received.toString());-->
+<!--return_array = received.getJSONArray("reports");-->
+<!--} catch (JSONException E){-->
+<!--Log.d("ServerConnector", "get Reports Json problem! " +responseString + E.getMessage() + " " +E.getLocalizedMessage() + " " + E.toString() );-->
+<!--}-->
+
+
+<!--return return_array;-->
+
+<!--</script>-->
