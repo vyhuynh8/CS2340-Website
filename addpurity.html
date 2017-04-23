@@ -43,6 +43,32 @@
         document.getElementById("demo").innerHTML = Date();
     </script>
 
+    <script>
+        function submitReport() {
+
+            var data = JSON.stringify({
+                "data": ""
+                "date": String(document.getElementsByName('demo')[0].value),
+                "location": String(document.getElementsByName('location')[0].value),
+                "report_number": String(document.getElementsByName('password')[0].value),
+                "reporter": String(document.getElementsByName('username')[0].value),
+                "token": "",
+                "address": ""
+            });
+
+            alert(data);
+            var xhr = new XMLHttpRequest();
+
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    console.log(this.responseText);
+                }
+            });
+            xhr.open("POST", "http://umb.kaangoksal.com:5235/register");
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send(data);
+        }
+    </script>
 
 
 </body>
