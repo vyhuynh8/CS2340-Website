@@ -2,18 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <title>Title</title>
     <link rel="stylesheet" href="stylesheet.css">
+    <style>
+      #map {
+        width: 100%;
+        height: 400px;
+        background-color: grey;
+      }
+    </style>
 </head>
 <body>
-<button onclick="location.href = 'landing.html';" style="width:90px">BACK</button>
-    <div class="fixed-center container">
-        <iframe
-                width="600"
-                height="450"
-                frameborder="0" style="border:0"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&q=Space+Needle,Seattle+WA" allowfullscreen>
-        </iframe>
-    </div>
+    <button onclick="location.href = 'landing.html';" style="width:90px">BACK</button>
+    <div id="map"></div>
+    <script>
+
+    function initMap() {
+      var uluru = {lat: -25.363, lng: 131.044};
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: 0
+      });
+    }
+  </script>
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&callback=initMap">
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
+<script>
+    function getReports(){
+        var base64encoded = "Basic" + " " + btoa(localStorage.getItem('email') + ":" + localStorage.getItem('password'));
+
+        var data = JSON.stringify(false);
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                console.log(" Response : " + xhttp.responseText);
+                var jsonfile = JSON.parse(xhttp.responseText);
+                console.log(jsonfile);
+                var result = [];
+                for(var i in jsonfile.reports)
+                    result.push(jsonfile.reports[i]);
+
+                console.log(result);
+                console.log(jsonfile.reports);
+
+                var arrayLength = parseInt(jsonfile.reports.length);
+
+                for (i=0; i<arrayLength; i++) {
+                    console.log(jsonfile.reports[i].location);
+                    // var position = new google.maps.LatLng(jsonfile.reports[i].location, jsonfile.reports[i].location.getElementById('longitude'));
+                    var marker = new google.maps.Marker({
+                        position: jsonfile.reports[i].location
+                        map: map,
+                        title: jsonfile.reports[i].data
+                    });
+                }
+            }
+        };
+        xhttp.open("POST", "http://umb.kaangoksal.com:5235/get_water_reports");
+        xhttp.setRequestHeader("content-type", "application/json");
+        xhttp.setRequestHeader("authorization", base64encoded);
+        xhttp.send(data);
+        console.log("Sent Request");
+    }
+
+    getReports();
+</script>
