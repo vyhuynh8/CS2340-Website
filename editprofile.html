@@ -11,14 +11,23 @@
 <body>
 <form action="/landing.html">
     <div class="fixed-center blocked container" style="width:190px; line-height: 180%;">
-        <label><b>Current Username: </b></label><label id="ulabel"></label>
-        <input style="width:170px" type="text" id="username"/>
+        <div class="input-group">
+            <span class="input-group-addon">Username:</span>
+            <input type="text" class="form-control" id="username" placeholder="Username" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon">Password:</span>
+            <input type="password" class="form-control" id="password" placeholder="Password" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon">Email:</span>
+            <input type="text" class="form-control" id="email" placeholder="Email" aria-describedby="basic-addon1">
+        </div>
+        <div class="btn-group" role="group">
+            <button onclick="return editProfile();" style="width:86px" type="submit">DONE</button>
+            <button>Return</button>
+        </div>
 
-        <label><b>Current Password: </b></label><label id="plabel"><b>Current Password:</b></label>
-        <input style="width:170px" type="password" id="password"/>
-
-        <label><b>Current Email: </b></label><label id="elabel"><b>Current Email:</b></label>
-        <input style="width:170px" id="email"/>
 
         <div style="display:inline-block;">
 
@@ -27,8 +36,6 @@
     </div>
 
 </form>
-<button onclick="return editProfile();" style="width:86px" type="submit">DONE</button>
-<button onclick="return test();" style="width:86px" type="submit">Test</button>
 <script>
     function onclick(){
         var input = document.getElementById("username");
@@ -71,7 +78,13 @@
                     alert("LOGIN FAILED.");
                 }
                 else {
-                    window.location.replace("landing.html");
+                    if (localStorage.getItem("account_type") == "manager") {
+                        window.location.replace("manager_landing.html");
+                    } else if (localStorage.getItem("account_type") == "worker") {
+                        window.location.replace("worker_landing.html");
+                    } else {
+                        window.location.replace("landing.html");
+                    }
                     localStorage.setItem("email", document.getElementsByName('email')[0].value);
                     localStorage.setItem("password", document.getElementsByName('password')[0].value);
                     localStorage.setItem("username", jsonfile['username']);
