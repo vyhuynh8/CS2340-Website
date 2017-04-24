@@ -4,38 +4,42 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Title</title>
-    <link rel="stylesheet" href="stylesheet.css">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/animate.css">
 </head>
-<body>
-<form action="/landing.html">
-    <div class="fixed-center blocked container" style="width:190px; line-height: 180%;">
-        <div class="input-group">
-            <span class="input-group-addon">Username:</span>
-            <input type="text" class="form-control" id="username" placeholder="Username" aria-describedby="basic-addon1">
+<body class ="align">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+
+	<img class= "nav animated fadeInDown" style="margin-bottom: 17px;width:450px" src="resources/EDITPROFILETEXT.png"/>
+    <br/>
+	
+	<form class="form login" method="post" action="landing.html">
+	<center>
+	   <strong><b>Username:</b></strong>
+		<div class="form__field">
+			<label><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use></svg><span class="hidden">Username:</span></label>
+            <input type="text" id="username" placeholder="Username" required>
         </div>
-        <div class="input-group">
-            <span class="input-group-addon">Password:</span>
-            <input type="password" class="form-control" id="password" placeholder="Password" aria-describedby="basic-addon1">
+		<strong><b>Password:</b></strong>
+        <div class="form__field">
+			<label><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use></svg><span class="hidden">Password:</span></label>
+            <input type="password" id="password" placeholder="Password" required>
         </div>
-        <div class="input-group">
-            <span class="input-group-addon">Email:</span>
-            <input type="text" class="form-control" id="email" placeholder="Email" aria-describedby="basic-addon1">
+		<strong><b>Email:</b></strong>
+        <div class="form__field">
+			<label><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use></svg><span class="hidden">Email:</span></label>
+            <input type="text"  id="email" placeholder="Email" required>
         </div>
-        <div class="btn-group" role="group">
-            <button onclick="return editProfile();" style="width:86px" type="submit">DONE</button>
-            <button>Return</button>
+		<br>
+        <div class="form__field">
+			<input id="submit" type="submit" value="Done" onclick=" return editProfile();">
         </div>
 
 
-        <div style="display:inline-block;">
 
-            <!--<button onclick="location.href = 'landing.html';" style="width:86px" type="submit">CANCEL</button>-->
-        </div>
-    </div>
-
-</form>
+  </form>
+</center>
 <script>
     function onclick(){
         var input = document.getElementById("username");
@@ -56,7 +60,7 @@
     onclick();
 
     function editProfile() {
-        alert("test");
+
         var base64encoded = "Basic" + " " + btoa(document.getElementById('email').value + ":" + document.getElementById('password').value);
 
 

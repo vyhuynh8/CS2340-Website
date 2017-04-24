@@ -5,20 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Title</title>
+    <title>View all water reports</title>
     <link rel="stylesheet" href="stylesheet.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
+	<link rel="stylesheet" href="css/animate.css">
 </head>
-<body>
-<button onclick="location.href = 'landing.html';" style="width:90px">BACK</button>
+<body class="align">
+	  <style>
+		.button {
+			background-color: #3090C7;
+			border: none;
+			color: white;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+		}
+	  </style>
+	 <center>
+
     <div id="test">
-    <table>
-        <th>Water Reports</th>
+    <table> <br>
+     <img class= "nav animated fadeInDown" style="margin-bottom: 17px;width:450px" src="resources/ALLWATERREPORTS.png"/>
+    <br/>
+	
+	<br>
+     <input type="button" class="button" id="submit" type="submit" value="Back" onclick="location.href='landing.html'">
+	</br>
+	
     </table>
     </div>
+	
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	</center>
 </body>
 </html>
 <script>
@@ -44,11 +67,12 @@
 
                 var string = $('html').attr('class');
                 var arrayLength = parseInt(jsonfile.reports.length);
+				
 
                 for (i=0; i<arrayLength; i++) {
-                    $("#test table") .append('<tr><td>'+"Data: "+jsonfile.reports[i].data+'<br>'+"Date: "+jsonfile.reports[i].date+'<br>'+"Location: "+jsonfile.reports[i].location+'<br>'+"Report Number: "+jsonfile.reports[i].report_number+'<br>'+"Reporter: "+jsonfile.reports[i].reporter+'<br>'+'</td></tr>')
+                    $("#test table") .append('<tr><td><br><font color="white">'+"Data: "+jsonfile.reports[i].data+'<br>'+"Date: "+jsonfile.reports[i].date+'<br>'+"Location: "+jsonfile.reports[i].location+'<br>'+"Report Number: "+jsonfile.reports[i].report_number+'<br>'+"Reporter: "+jsonfile.reports[i].reporter+'<br>'+'<hr></br></font></td></tr>')
                 }
-
+	
 
 //                data.addColumn('string', 'Topping');
 //                data.addColumn('number', 'Slices');
