@@ -19,20 +19,6 @@
 <body>
     <button onclick="location.href = 'landing.html';" style="width:90px">BACK</button>
     <div id="map"></div>
-    <script>
-
-    function initMap() {
-      var uluru = {lat: -25.363, lng: 131.044};
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        center: 0
-      });
-    }
-  </script>
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&callback=initMap">
-    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
@@ -40,10 +26,8 @@
 <script>
     function getReports(){
         var base64encoded = "Basic" + " " + btoa(localStorage.getItem('email') + ":" + localStorage.getItem('password'));
-
         var data = JSON.stringify(false);
         var xhttp = new XMLHttpRequest();
-
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
                 console.log(" Response : " + xhttp.responseText);
@@ -52,19 +36,33 @@
                 var result = [];
                 for(var i in jsonfile.reports)
                     result.push(jsonfile.reports[i]);
-
                 console.log(result);
                 console.log(jsonfile.reports);
-
                 var arrayLength = parseInt(jsonfile.reports.length);
-
+                var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 4,
+                    center: myLatlng
+                });
                 for (i=0; i<arrayLength; i++) {
                     console.log(jsonfile.reports[i].location);
-                    // var position = new google.maps.LatLng(jsonfile.reports[i].location, jsonfile.reports[i].location.getElementById('longitude'));
+                    var json0 = JSON.parse(jsonfile.reports[i].location);
+                    console.log(json0.latitude);
+                    console.log(json0.longitude);
+                    var position = new google.maps.LatLng(json0.latitude, json0.longitude);
                     var marker = new google.maps.Marker({
-                        position: jsonfile.reports[i].location
+                        position: position,
                         map: map,
                         title: jsonfile.reports[i].data
+                    });
+                    marker.setMap(map);
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: '<tr><td>'+"Data: "+jsonfile.reports[i].data+'<br>'+"Date: "+jsonfile.reports[i].date+'<br>'+"Location: "+jsonfile.reports[i].location+'<br>'+"Report Number: "+jsonfile.reports[i].report_number+'<br>'+"Reporter: "+jsonfile.reports[i].reporter+'<br>'+'</td></tr>'
+                    });
+
+                    marker.addListener('click', function() {
+                        infowindow.open(map, marker);
                     });
                 }
             }
@@ -75,6 +73,8 @@
         xhttp.send(data);
         console.log("Sent Request");
     }
-
     getReports();
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&callback=getReports">
 </script>
