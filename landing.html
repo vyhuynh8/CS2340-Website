@@ -5,16 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <title>Title</title>
+    <title>User Profile</title>
     <link rel="stylesheet" href="stylesheet.css">
+	<link rel="stylesheet" href="css/animate.css">
 </head>
 <body>
-<div style="text-align:center; line-height: 150%;" class="fixed-center blocked container">
-    <button onclick="location.href = 'editprofile.html';">Edit Profile</button>
-    <button onclick="location.href = 'addreport.html';">Add Report</button>
-    <button onclick="location.href = 'water.html';">Water</button>
-    <button onclick="location.href = 'viewreports.html';">View Reports</button>
-    <button onclick="location.href = 'index.html';">Log Out</button>
+<div class="center-div">
+
+    <img class= "nav animated fadeInDown" style="margin-bottom: 17px;width:450px" src="resources/HYDRONATION.png"/>
+    <br/>
+	<a href = "editprofile.html">
+    <img class= "nav icon" style="height:150px" src="resources/editprofile.png"/> </a>
+	<a href = "addreport.html">
+    <img class= "nav icon" style="height:150px" src="resources/checklist2.png"/> </a>
+	<a href = "viewreports.html">
+    <img class= "nav icon" style="height:150px" src="resources/reports.png"/></a>
+	<a href = "water.html">
+    <img class= "nav icon" style="height:150p; width:158px;" src="resources/map.png"/></a>
+	<a href = "index.html">
+    <img class= "nav icon" style="height:150p; width:158px;" src="resources/logout.png"/></a>
+
 </div>
 <script>
     function sendHTTP() {
