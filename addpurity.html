@@ -26,14 +26,14 @@
         <input id="pac-input" style="color:black" class="controls" style="width:200px;" type="text" placeholder="Enter Location" name="location" required>
         <div id="map" style="height: 200px; weight: 200px"></div>
         <br>
-        <label class="condition"><b><font color = "white">Overall Condition</b></label></font>
-        <select id="condition" name="type" style="width:70px margin-right:20px;">
+        <label class="condition"><b><font color = "white">Overall Condition</font></b></label>
+        <select id="condition" name="type" style="width:70px; margin-right:20px;">
             <option value="Safe">Safe</option>
             <option value="Treatable">Treatable</option>
             <option value="Unsafe">Unsafe</option>
         </select>
         <br>
-        <label><font color = "white"><b>Virus PPM:</b></label></font>
+        <label><font color = "white"><b>Virus PPM:</b></font></label>
         <input id="ppm" type="text" style="width:86px; margin-left:55px;" name="Virus" required>
         <br>
         <br>
@@ -88,7 +88,7 @@
 
     function submitReport() {
 
-        var base64encoded = "Basic" + " " + localStorage.getItem('email') + ":" + localStorage.getItem('password');
+        var base64encoded = "Basic" + " " + btoa(localStorage.getItem('email') + ":" + localStorage.getItem('password'));
 
         var data = JSON.stringify({
             "virus_ppm": parseFloat(document.getElementById('ppm').value),

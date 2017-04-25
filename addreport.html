@@ -98,7 +98,7 @@
 
         function submitReport() {
 
-            var base64encoded = "Basic" + " " + localStorage.getItem('email') + ":" + localStorage.getItem('password');
+            var base64encoded = "Basic" + " " + btoa(localStorage.getItem('email') + ":" + localStorage.getItem('password'));
 
             var data = JSON.stringify({
 
