@@ -6,39 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="stylesheet.css">
-
+	<link rel="stylesheet" href="css/animate.css">
 </head>
-<body>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places"></script>
-    <div class="fixed-center blocked container" style="width:294px; line-height:22px;">
+<body class ="align">
+<font color = "white"> <b>
+	<center><br>
+    <img class= "nav animated fadeInDown" style="margin-bottom: 17px;width:450px" src="resources/ADDPURITYREPORT.png"/>
+    </br> <hr>
+
+    
+	<div class="fixed-center blocked container" style="width:294px; line-height:22px;">
         <p style="font-size:16px;"><b>Water Purity Submission</b></p>
         <label><b>Date and time:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="demo"></p></label>
         <label><b>Report Number:</b> 2340</label>
         <br>
         <label><b>Reporter:</b> tester</label><br>
         <label><b>Location:</b></label>
-        <input class="Autocomplete" style="width:100px;" type="text" placeholder="Enter Location" name="location" required>
-        <button>SEARCH</button>
+		<input id="pac-input" class="controls" style="width:200px;" type="text" placeholder="Enter Location" name="location" required></input>
+        <div id="map" style="height: 200px; weight: 200px"></div>
+		
         <br>
-
-        <label><b>Overall Condition</b></label>
-        <select name="type" style="width:86px">
+		</font></b>
+        <label><b><font color = "white">Overall Condition</b></label></font>
+        <select name="type" style="width:70px margin-right:20px;">
             <option value="Safe">Safe</option>
             <option value="Treatable">Treatable</option>
             <option value="Unsafe">Unsafe</option>
         </select>
         <br>
-        <br>
-        <label><b>Virus PPM:</b></label>
-        <input type="text" name="Virus" required>
-        <br>
-        <br>
-        <label><b>Contaiminant PPM:</b></label>
-        <input type="text" name="Contaiminant" required>
+        <label><font color = "white"><b>Virus PPM:</b></label></font>
+        <input type="text" style="width:86px; margin-left:55px;" name="Virus" required>
         <br>
         <br>
-        <button onclick="window.history.back();" style="width:96px; margin-right:2px;"  type="submit">SUBMIT</button>
-        <button onclick="window.history.back();" style="width:96px"  type="submit">CANCEL</button>
+        <label><b><font color = "white">Contaiminant PPM:</b></label></font>
+        <input type="text" name="Contaiminant" style="width:86px; margin-left:20px;"required>
+        <br>
+        <br>
+<style>
+		.button {
+			background-color: #3090C7;
+			border: none;
+			color: white;
+			padding: 15px 15px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+            border-radius: 25px;
+		}
+	  </style>
+	  <input type="button" class="button" id="submit" type="submit" value="Submit" onclick="window.history.back();">
+	  <input type="button" class="button" id="back" type="submit" value="Back" onclick="window.history.back();">
     </div>
 
 
@@ -50,7 +70,7 @@
         function submitReport() {
 
             var data = JSON.stringify({
-                "data": ""
+                "data": "",
                 "date": String(document.getElementsByName('demo')[0].value),
                 "location": String(document.getElementsByName('location')[0].value),
                 "report_number": String(document.getElementsByName('password')[0].value),
@@ -72,7 +92,68 @@
             xhr.send(data);
         }
     </script>
+    <script>
+        function initAutocomplete() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -33.8688, lng: 151.2195},
+                zoom: 13,
+                mapTypeId: 'roadmap'
+            });
 
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function(marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        }
+    </script>
+    <script async defer
+             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places&callback=initAutocomplete">
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
