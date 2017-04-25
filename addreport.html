@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places"></script>
     <div class="fixed-center blocked container" style="width:294px; line-height:22px;">
         <p style="font-size:16px;"><b>Water Report Submission</b></p>
         <label><b>Date and time:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="demo"></p></label>
@@ -16,8 +15,8 @@
         <br>
         <label><b>Reporter:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="reporter"></p></label><br>
         <label><b>Location:</b></label>
-        <input class="Autocomplete" style="width:100px;" type="text" placeholder="Enter Location" name="location" required>
-        <button>SEARCH</button>
+        <input id="pac-input" class="controls" style="width:200px;" type="text" placeholder="Enter Location" name="location" required></input>
+        <div id="map" style="height: 200px; weight: 200px"></div>
         <br>
 
         <label><b>Type Of Water:</b></label>
@@ -44,15 +43,10 @@
         <button onclick="window.history.back();" style="width:96px"  type="submit">CANCEL</button>
     </div>
 
-    <!--<script type="text/javascript" src="js/moment.js">-->
-        <!--moment().format('DD-MMM-YYYY hh:mm:ss');-->
-    <!--</script>-->
-
     <script>
         document.getElementById("demo").innerHTML = Date();
         document.getElementById("reporter").innerHTML = localStorage.getItem("email");
     </script>
-
 
     <script>
         function makeid()
@@ -99,6 +93,69 @@
             xhr.setRequestHeader("content-type", "application/json");
             xhr.send(report);
         }
+    </script>
+
+    <script>
+        function initAutocomplete() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -33.8688, lng: 151.2195},
+                zoom: 13,
+                mapTypeId: 'roadmap'
+            });
+
+            var input = document.getElementById('pac-input');
+            var searchBox = new google.maps.places.SearchBox(input);
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            searchBox.addListener('places_changed', function() {
+                var places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // Clear out the old markers.
+                markers.forEach(function(marker) {
+                    marker.setMap(null);
+                });
+                markers = [];
+
+                // For each place, get the icon, name and location.
+                var bounds = new google.maps.LatLngBounds();
+                places.forEach(function(place) {
+                    if (!place.geometry) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    markers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+        }
+    </script>
+    <script async defer
+             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places&callback=initAutocomplete">
     </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
