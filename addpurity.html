@@ -67,7 +67,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 <script>
-    document.getElementById("demo").innerHTML = moment().format('YYYY-MM-DD HH:MM:SS');
+    document.getElementById("demo").innerHTML = moment().format('YYYY-MM-DD hh:mm:ss');
 </script>
 
 <script>
@@ -120,7 +120,13 @@
         xhttp.onreadystatechange = function() {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
                 console.log(" Response : " + xhttp.responseText);
-                var jsonfile = JSON.parse(xhttp.responseText);
+                if(xhttp.responseText == "<html><body><h1>Report Added Successfully</h1></body></html>") {
+                    alert("Report Added Successfully!");
+                    window.history.back();
+                }
+                else {
+                    alert("Add Water Report Failed.");
+                }
             }
         };
 
