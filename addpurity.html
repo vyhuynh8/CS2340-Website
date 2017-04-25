@@ -9,8 +9,8 @@
 	<link rel="stylesheet" href="css/animate.css">
 </head>
 <body class ="align">
-<font color = "white"> <b>
-	<center><br>
+<b/>
+	<center/><br>
     <img class= "nav animated fadeInDown" style="margin-bottom: 17px;width:450px" src="resources/ADDPURITYREPORT.png"/>
     </br> <hr>
 
@@ -18,28 +18,27 @@
 	<div class="fixed-center blocked container" style="width:294px; line-height:22px;">
         <p style="font-size:16px;"><b>Water Purity Submission</b></p>
         <label><b>Date and time:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="demo"></p></label>
-        <label><b>Report Number:</b> 2340</label>
+        <label><b>Report Number:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="number"></p></label>
         <br>
-        <label><b>Reporter:</b> tester</label><br>
+
+        <label><b>Reporter:</b><p style="font-size:12px; margin: -1px 0px -1px 0px" id="reporter"></p></label><br>
         <label><b>Location:</b></label>
-		<input id="pac-input" class="controls" style="width:200px;" type="text" placeholder="Enter Location" name="location" required></input>
+        <input id="pac-input" style="color:black" class="controls" style="width:200px;" type="text" placeholder="Enter Location" name="location" required>
         <div id="map" style="height: 200px; weight: 200px"></div>
-		
         <br>
-		</font></b>
-        <label><b><font color = "white">Overall Condition</b></label></font>
-        <select name="type" style="width:70px margin-right:20px;">
+        <label class="condition"><b><font color = "white">Overall Condition</b></label></font>
+        <select id="condition" name="type" style="width:70px margin-right:20px;">
             <option value="Safe">Safe</option>
             <option value="Treatable">Treatable</option>
             <option value="Unsafe">Unsafe</option>
         </select>
         <br>
         <label><font color = "white"><b>Virus PPM:</b></label></font>
-        <input type="text" style="width:86px; margin-left:55px;" name="Virus" required>
+        <input id="ppm" type="text" style="width:86px; margin-left:55px;" name="Virus" required>
         <br>
         <br>
-        <label><b><font color = "white">Contaiminant PPM:</b></label></font>
-        <input type="text" name="Contaiminant" style="width:86px; margin-left:20px;"required>
+        <label><b><font color = "white">Contaminant PPM:</b></label></font>
+        <input id="conppm" type="text" name="Contaiminant" style="width:86px; margin-left:20px;"required>
         <br>
         <br>
 <style>
@@ -57,104 +56,159 @@
             border-radius: 25px;
 		}
 	  </style>
-	  <input type="button" class="button" id="submit" type="submit" value="Submit" onclick="window.history.back();">
+        <input type="button" class="button" id="submit" type="submit" value="Submit" onclick="return submitReport();">
 	  <input type="button" class="button" id="back" type="submit" value="Back" onclick="window.history.back();">
     </div>
 
 
-    <script>
-        document.getElementById("demo").innerHTML = Date();
-    </script>
+<script>
+    document.getElementById("reporter").innerHTML = localStorage.getItem("email");
+</script>
 
-    <script>
-        function submitReport() {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<script>
+    document.getElementById("demo").innerHTML = moment().format('YYYY-MM-DD HH:MM:SS');
+</script>
 
-            var data = JSON.stringify({
-                "data": "",
-                "date": String(document.getElementsByName('demo')[0].value),
-                "location": String(document.getElementsByName('location')[0].value),
-                "report_number": String(document.getElementsByName('password')[0].value),
-                "reporter": String(document.getElementsByName('username')[0].value),
-                "token": "",
-                "address": ""
+<script>
+    function makeid()
+    {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-";
+
+        for( var i=0; i < 36; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+    }
+
+    document.getElementById("number").innerHTML ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+
+    function submitReport() {
+
+        var base64encoded = "Basic" + " " + localStorage.getItem('email') + ":" + localStorage.getItem('password');
+
+        var data = JSON.stringify({
+            "virus_ppm": parseFloat(document.getElementById('ppm').value),
+            "contamination_ppm": parseFloat(document.getElementById('conppm').value),
+            "overall_condition": document.getElementById('condition').options[document.getElementById('condition').selectedIndex].value,
+        })
+
+        var locationJSON = JSON.stringify({
+
+            "latitude": parseFloat(localStorage.getItem("lat")),
+            "longitude": parseFloat(localStorage.getItem("lng"))
+        })
+
+
+        var report = JSON.stringify({
+            "date": String(document.getElementById('demo').innerHTML),
+            "report_number": String(document.getElementById('number').innerHTML),
+            "reporter": String(document.getElementById('reporter').innerHTML),
+            "location": locationJSON.toString(),
+            "data":data.toString(),
+            "type": "WaterPurityReport"
+        });
+
+        console.log(JSON.parse(report));
+
+        console.log(report);
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                console.log(" Response : " + xhttp.responseText);
+                var jsonfile = JSON.parse(xhttp.responseText);
+            }
+        };
+
+        xhttp.open("POST", "http://umb.kaangoksal.com:5235/add_water_report");
+        xhttp.setRequestHeader("content-type", "application/json");
+        xhttp.setRequestHeader("authorization", base64encoded);
+        xhttp.send(report);
+        console.log("Sent Request");
+    }
+</script>
+
+<script>
+    markers = [];
+    function initAutocomplete() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -33.8688, lng: 151.2195},
+            zoom: 13,
+            mapTypeId: 'roadmap'
+        });
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        searchBox.addListener('places_changed', function() {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) {
+                return;
+            }
+//                // Clear out the old markers.
+//                markers = [];
+
+            markers.forEach(function(marker) {
+                marker.setMap(null);
             });
 
-            alert(data);
-            var xhr = new XMLHttpRequest();
-
-            xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                    console.log(this.responseText);
-                }
-            });
-            xhr.open("POST", "http://umb.kaangoksal.com:5235/register");
-            xhr.setRequestHeader("content-type", "application/json");
-            xhr.send(data);
-        }
-    </script>
-    <script>
-        function initAutocomplete() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -33.8688, lng: 151.2195},
-                zoom: 13,
-                mapTypeId: 'roadmap'
-            });
-
-            var input = document.getElementById('pac-input');
-            var searchBox = new google.maps.places.SearchBox(input);
-            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-            searchBox.addListener('places_changed', function() {
-                var places = searchBox.getPlaces();
-
-                if (places.length == 0) {
+            // For each place, get the icon, name and location.
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function(place) {
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
                     return;
                 }
+                var icon = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+                // Create a marker for each place.
+                markers.push(new google.maps.Marker({
+                    map: map,
+                    icon: icon,
+                    title: place.name,
+                    position: place.geometry.location
+                }));
 
-                // Clear out the old markers.
-                markers.forEach(function(marker) {
-                    marker.setMap(null);
-                });
-                markers = [];
+                var lat = markers[0].getPosition().lat();
+                var lng = markers[0].getPosition().lng();
+                localStorage.setItem("lat",lat);
+                localStorage.setItem("lng",lng);
 
-                // For each place, get the icon, name and location.
-                var bounds = new google.maps.LatLngBounds();
-                places.forEach(function(place) {
-                    if (!place.geometry) {
-                        console.log("Returned place contains no geometry");
-                        return;
-                    }
-                    var icon = {
-                        url: place.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
-
-                    // Create a marker for each place.
-                    markers.push(new google.maps.Marker({
-                        map: map,
-                        icon: icon,
-                        title: place.name,
-                        position: place.geometry.location
-                    }));
-
-                    if (place.geometry.viewport) {
-                        // Only geocodes have viewport.
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                map.fitBounds(bounds);
+                if (place.geometry.viewport) {
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
             });
-        }
-    </script>
-    <script async defer
-             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places&callback=initAutocomplete">
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+            map.fitBounds(bounds);
+        });
+    }
+
+    //        function placeMarker(location) {
+    //            if ( marker ) {
+    //                marker.setPosition(location);
+    //            } else {
+    //                marker = new google.maps.Marker({
+    //                    position: location,
+    //                    map: map
+    //                });
+    //            }
+    //        }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoOm2kI-jFtn2uIKB_29UZ1sn2OnXAirU&libraries=places&callback=initAutocomplete">
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>
